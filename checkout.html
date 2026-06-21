@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAIZEN 改善 — Secure Checkout</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="images/logo-mark.svg">
+    <style>
+        .checkout-page {
+            padding: 120px 2rem 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 80vh;
+        }
+
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 4rem;
+        }
+
+        .checkout-section {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+        }
+
+        .checkout-section h2 {
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            letter-spacing: 0.1em;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.1em;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color var(--transition-fast);
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-warm);
+        }
+
+        .checkout-summary-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-img {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-tertiary);
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+
+        .summary-details {
+            flex: 1;
+        }
+
+        .summary-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: block;
+        }
+
+        .summary-qty {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .summary-price {
+            font-weight: 700;
+            color: var(--accent-warm);
+        }
+
+        .summary-totals {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .summary-row.total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-submit {
+            width: 100%;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .success-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-smooth);
+        }
+
+        .success-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .success-overlay h1 {
+            font-size: 3rem;
+            color: var(--accent-warm);
+            margin-bottom: 1rem;
+        }
+
+        .success-overlay p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar" class="scrolled">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="images/logo-mark.svg" alt="KAIZEN Logo" class="nav-logo-img">
+                <span class="nav-logo-text">KAIZEN</span>
+            </a>
+            <div class="nav-actions">
+                <a href="index.html" class="btn-secondary btn-sm" style="font-size:0.7rem">RETURN TO SHOP</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="checkout-page">
+        <form id="checkout-form" class="checkout-grid">
+            <!-- Left: Form -->
+            <div class="checkout-left">
+                <div class="checkout-section">
+                    <h2>Shipping Information</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fname">First Name *</label>
+                            <input type="text" id="fname" required minlength="2" maxlength="50" pattern="^[a-zA-Z\\s]+$">
+                        </div>
+                        <div class="form-group">
+                            <label for="lname">Last Name *</label>
+                            <input type="text" id="lname" required minlength="2" maxlength="50" pattern="^[a-zA-Z\\s]+$">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" required pattern="^[0-9]{10}$" placeholder="10 digit mobile number">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Street Address *</label>
+                        <input type="text" id="address" required minlength="5" maxlength="100">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City *</label>
+                            <input type="text" id="city" required minlength="2" maxlength="50">
+                        </div>
+                        <div class="form-group">
+                            <label for="pin">PIN Code *</label>
+                            <input type="text" id="pin" required pattern="^[0-9]{6}$" placeholder="6 digit PIN code">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-section" style="margin-top: 2rem;">
+                    <h2>Payment Options</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size:0.9rem;">
+                        This is a secure checkout simulation. We will process your order via Cash on Delivery or send a UPI link to your WhatsApp.
+                    </p>
+                    <div class="form-group">
+                        <label for="payment">Select Method *</label>
+                        <select id="payment" required>
+                            <option value="cod">Cash on Delivery</option>
+                            <option value="upi">UPI / Online (via WhatsApp)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Order Summary -->
+            <div class="checkout-right">
+                <div class="checkout-section">
+                    <h2>Order Summary</h2>
+                    <div id="checkout-items">
+                        <!-- Injected via JS -->
+                    </div>
+                    <div class="summary-totals">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span id="summary-subtotal">₹0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping</span>
+                            <span>FREE</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <span id="summary-total">₹0</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary btn-submit">
+                        PLACE ORDER
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:8px"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                    <div id="form-error" class="error-message">Please fill all required fields correctly.</div>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <div id="success-screen" class="success-overlay">
+        <h1>ORDER PLACED</h1>
+        <p>Thank you for copping from KAIZEN 改善. We'll contact you shortly.</p>
+        <a href="index.html" class="btn-primary">CONTINUE SHOPPING</a>
+    </div>
+
+    <!-- We need data.js for security validation -->
+    <script src="data.js"></script>
+    <script>
+        // Simple XSS Sanitizer for rendering
+        const sanitize = (str) => {
+            if (!str) return '';
+            const temp = document.createElement('div');
+            temp.textContent = str;
+            return temp.innerHTML;
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load and strictly validate cart data
+            let rawCart = JSON.parse(localStorage.getItem('kaizen_cart')) || [];
+            
+            // SECURITY: Deep validation of local storage against database
+            const secureCart = rawCart.map(item => {
+                const dbProduct = getProductById(item.id);
+                if (dbProduct) {
+                    return {
+                        id: dbProduct.id,
+                        name: dbProduct.name,
+                        price: dbProduct.price,
+                        img: dbProduct.img,
+                        qty: Math.max(1, parseInt(item.qty) || 1)
+                    };
+                }
+                return null;
+            }).filter(item => item !== null);
+
+            // Re-save secure cart to wipe out tampered data
+            localStorage.setItem('kaizen_cart', JSON.stringify(secureCart));
+
+            if (secureCart.length === 0) {
+                document.querySelector('.checkout-page').innerHTML = `
+                    <div style="text-align:center; padding: 100px 20px;">
+                        <h2>YOUR BAG IS EMPTY</h2>
+                        <a href="index.html" class="btn-primary" style="margin-top:2rem">RETURN TO SHOP</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Render Items
+            const itemsContainer = document.getElementById('checkout-items');
+            const subtotalEl = document.getElementById('summary-subtotal');
+            const totalEl = document.getElementById('summary-total');
+
+            let total = 0;
+
+            itemsContainer.innerHTML = secureCart.map(item => {
+                const itemTotal = item.price * item.qty;
+                total += itemTotal;
+                return `
+                    <div class="checkout-summary-item">
+                        <img src="${sanitize(item.img)}" alt="${sanitize(item.name)}" class="summary-img">
+                        <div class="summary-details">
+                            <span class="summary-name">${sanitize(item.name)}</span>
+                            <span class="summary-qty">Qty: ${item.qty}</span>
+                        </div>
+                        <span class="summary-price">₹${itemTotal.toLocaleString('en-IN')}</span>
+                    </div>
+                `;
+            }).join('');
+
+            subtotalEl.textContent = `₹${total.toLocaleString('en-IN')}`;
+            totalEl.textContent = `₹${total.toLocaleString('en-IN')}`;
+
+            // Form Submission
+            const form = document.getElementById('checkout-form');
+            const errorMsg = document.getElementById('form-error');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Form is already validated by HTML5 attributes (pattern, minlength, etc.)
+                // But we check validity again to be safe
+                if (!form.checkValidity()) {
+                    errorMsg.style.display = 'block';
+                    return;
+                }
+
+                errorMsg.style.display = 'none';
+
+                // In a real app, send securely structured data to backend here.
+                // Since this is mock, we just clear cart and show success.
+                localStorage.removeItem('kaizen_cart');
+                
+                const btn = form.querySelector('.btn-submit');
+                btn.innerHTML = 'PROCESSING...';
+                btn.style.opacity = '0.7';
+                
+                setTimeout(() => {
+                    document.getElementById('success-screen').classList.add('active');
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+</html>

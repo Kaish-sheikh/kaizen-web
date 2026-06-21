@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAIZEN 改善 — Product Details</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="images/logo-mark.svg">
+    <style>
+        /* Product Page Specific Styles */
+        .product-page {
+            padding: 120px 2rem 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 80vh;
+        }
+        
+        .pdp-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.6s ease forwards;
+        }
+        
+        .pdp-image-container {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        
+        .pdp-image-container img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .pdp-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        
+        .pdp-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .pdp-tag {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+        
+        .pdp-title {
+            font-size: 3rem;
+            line-height: 1.1;
+            font-weight: 800;
+        }
+        
+        .pdp-price {
+            font-size: 1.8rem;
+            color: var(--accent-warm);
+            font-weight: 700;
+        }
+        
+        .pdp-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+        }
+        
+        .pdp-sizes {
+            margin-top: 1rem;
+        }
+        
+        .pdp-sizes h4 {
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+        }
+        
+        .size-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        
+        .size-btn {
+            width: 50px;
+            height: 50px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-primary);
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            transition: all var(--transition-fast);
+        }
+        
+        .size-btn:hover:not(:disabled) {
+            border-color: var(--accent-warm);
+            color: var(--accent-warm);
+        }
+        
+        .size-btn.active {
+            background: var(--accent-warm);
+            border-color: var(--accent-warm);
+            color: var(--bg-primary);
+        }
+
+        .size-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+        
+        .pdp-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .pdp-actions .btn-primary {
+            flex: 1;
+            justify-content: center;
+        }
+
+        .not-found {
+            text-align: center;
+            padding: 100px 20px;
+        }
+        
+        .not-found h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--accent-warm);
+        }
+
+        @media (max-width: 900px) {
+            .pdp-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .pdp-title {
+                font-size: 2.2rem;
+            }
+            .pdp-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="preloader-inner">
+            <div class="preloader-logo">改善</div>
+            <div class="preloader-text">KAIZEN</div>
+            <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="index.html#hero" class="nav-logo">
+                <img src="images/logo-mark.svg" alt="KAIZEN Logo" class="nav-logo-img">
+                <span class="nav-logo-text">KAIZEN</span>
+                <span class="nav-logo-jp">改善</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html#drops">DROPS</a></li>
+                <li><a href="index.html#products">SHOP</a></li>
+                <li><a href="index.html#about">ABOUT</a></li>
+                <li><a href="index.html#contact">CONTACT</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button id="cart-btn" class="cart-btn" aria-label="Shopping cart">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <path d="M16 10a4 4 0 0 1-8 0"/>
+                    </svg>
+                    <span id="cart-count" class="cart-count">0</span>
+                </button>
+                <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-overlay" class="cart-overlay"></div>
+    <aside id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>YOUR BAG <span class="cart-header-jp">袋</span></h3>
+            <button id="cart-close" class="cart-close" aria-label="Close cart">&times;</button>
+        </div>
+        <div id="cart-items" class="cart-items">
+            <!-- Rendered by cart.js -->
+        </div>
+        <div id="cart-footer" class="cart-footer" style="display:none;">
+            <div class="cart-total">
+                <span>TOTAL</span>
+                <span id="cart-total-price">₹0</span>
+            </div>
+            <a href="checkout.html" class="btn-primary btn-checkout">
+                PROCEED TO CHECKOUT
+            </a>
+        </div>
+    </aside>
+
+    <!-- Product Content -->
+    <main class="product-page" id="product-root">
+        <!-- Injected via JS -->
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <span id="toast-message">Added to bag!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="images/logo-mark.svg" alt="KAIZEN" class="footer-logo">
+                    <p>Premium streetwear brand based on continuous improvement.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 KAIZEN 改善. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="cart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            const root = document.getElementById('product-root');
+
+            if (!productId || typeof getProductById !== 'function') {
+                root.innerHTML = '<div class="not-found"><h1>404</h1><p>Product not found.</p><a href="index.html" class="btn-primary" style="margin-top:2rem">RETURN TO SHOP</a></div>';
+                return;
+            }
+
+            const product = getProductById(productId);
+
+            if (!product) {
+                root.innerHTML = '<div class="not-found"><h1>404</h1><p>Product not found.</p><a href="index.html" class="btn-primary" style="margin-top:2rem">RETURN TO SHOP</a></div>';
+                return;
+            }
+
+            document.title = `KAIZEN 改善 — ${sanitize(product.name)}`;
+
+            let badgeHtml = '';
+            if (product.badge) {
+                badgeHtml = `<span class="product-badge ${sanitize(product.badgeClass)} pdp-badge">${sanitize(product.badge)}</span>`;
+            }
+
+            let sizesHtml = '';
+            if (product.sizes) {
+                const buttons = product.sizes.map(sizeObj => {
+                    const size = typeof sizeObj === 'object' ? sizeObj.size : sizeObj;
+                    const disabled = typeof sizeObj === 'object' && sizeObj.soldOut ? 'disabled' : '';
+                    return `<button class="size-btn" ${disabled}>${sanitize(String(size))}</button>`;
+                }).join('');
+                
+                sizesHtml = `
+                    <div class="pdp-sizes">
+                        <h4>SELECT SIZE</h4>
+                        <div class="size-options">
+                            ${buttons}
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Default sizes if none specified in DB
+                sizesHtml = `
+                    <div class="pdp-sizes">
+                        <h4>SELECT SIZE</h4>
+                        <div class="size-options">
+                            <button class="size-btn">S</button>
+                            <button class="size-btn">M</button>
+                            <button class="size-btn active">L</button>
+                            <button class="size-btn">XL</button>
+                            <button class="size-btn">XXL</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const addToCartBtnState = product.available 
+                ? `<button class="btn-primary btn-add-cart" id="pdp-add-cart" data-id="${sanitize(product.id)}" data-name="${sanitize(product.name)}" data-price="${product.price}" data-img="${sanitize(product.img)}">ADD TO BAG</button>` 
+                : `<button class="btn-primary" disabled style="opacity: 0.5; cursor: not-allowed;">SOLD OUT</button>`;
+
+            root.innerHTML = `
+                <div class="pdp-container">
+                    <div class="pdp-image-container">
+                        ${badgeHtml}
+                        <img src="${sanitize(product.img)}" alt="${sanitize(product.name)}">
+                    </div>
+                    <div class="pdp-details">
+                        <span class="pdp-tag">${sanitize(product.tag)}</span>
+                        <h1 class="pdp-title">${sanitize(product.name)}</h1>
+                        <div class="pdp-price">₹${product.price.toLocaleString('en-IN')}</div>
+                        <div class="pdp-desc">
+                            ${sanitize(product.desc)}
+                        </div>
+                        ${sizesHtml}
+                        <div class="pdp-actions">
+                            ${addToCartBtnState}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Size selection logic
+            const sizeBtns = root.querySelectorAll('.size-btn:not(:disabled)');
+            if(sizeBtns.length > 0 && !root.querySelector('.size-btn.active')) {
+                sizeBtns[0].classList.add('active'); // default select first
+            }
+
+            sizeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    sizeBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+            });
+
+            // Prevent default global add to cart from capturing, or let it capture if we just rely on event bubbling.
+            // Since cart.js adds a global click listener for '.btn-add-cart', we don't need to add another listener here!
+            // Wait, but we might want to attach selected size. 
+            // For a basic Shopify flow, we would append size to the product ID or name in the cart.
+            // Let's keep it simple for now as the original code didn't handle size in cart.
+            
+            // Re-initialize cart UI to bind elements
+            if(typeof updateCartUI === 'function') updateCartUI();
+            
+            // Remove preloader
+            setTimeout(() => {
+                const pre = document.getElementById('preloader');
+                if(pre) pre.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 500);
+        });
+    </script>
+</body>
+</html>
