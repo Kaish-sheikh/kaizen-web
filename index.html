@@ -3,9 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAIZEN 改善 — Streetwear That Evolves</title>
-    <meta name="description" content="KAIZEN — Premium Indian streetwear brand. Shop jerseys, baggy jeans, graphic tees, track pants & jackets. Based on continuous improvement. DM to cop.">
+    <title>KAIZEN 改善 - Streetwear That Evolves</title>
+    <meta name="description" content="KAIZEN - Premium Indian streetwear brand. Shop limited jerseys, baggy jeans, graphic tees, track pants, and outerwear built on continuous improvement.">
     <meta name="keywords" content="KAIZEN, streetwear, Indian streetwear, jerseys, baggy jeans, graphic tees, track pants, jackets, urban fashion">
+    <link rel="canonical" href="index.html">
+    <meta property="og:title" content="KAIZEN 改善 - Streetwear That Evolves">
+    <meta property="og:description" content="Premium Indian streetwear built on continuous improvement. Shop limited jerseys, denim, tees, tracks, and outerwear.">
+    <meta property="og:image" content="images/logo.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
@@ -13,7 +19,6 @@
     <link rel="icon" type="image/svg+xml" href="images/logo-mark.svg">
 </head>
 <body>
-    <!-- Preloader -->
     <div id="preloader">
         <div class="preloader-inner">
             <div class="preloader-logo">改善</div>
@@ -22,11 +27,9 @@
         </div>
     </div>
 
-    <!-- Custom Cursor -->
     <div id="cursor" class="cursor"></div>
     <div id="cursor-follower" class="cursor-follower"></div>
 
-    <!-- Navigation -->
     <nav id="navbar">
         <div class="nav-container">
             <a href="#hero" class="nav-logo">
@@ -42,14 +45,17 @@
             </ul>
             <div class="nav-actions">
                 <button id="cart-btn" class="cart-btn" aria-label="Shopping cart">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
                         <line x1="3" y1="6" x2="21" y2="6"/>
                         <path d="M16 10a4 4 0 0 1-8 0"/>
                     </svg>
                     <span id="cart-count" class="cart-count">0</span>
                 </button>
-                <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+                    <span class="theme-toggle-icon">◐</span>
+                </button>
+                <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -58,7 +64,6 @@
         </div>
     </nav>
 
-    <!-- Mobile Menu -->
     <div id="mobile-menu" class="mobile-menu">
         <div class="mobile-menu-bg"></div>
         <div class="mobile-menu-content">
@@ -69,14 +74,13 @@
                 <li><a href="#contact">CONTACT</a></li>
             </ul>
             <div class="mobile-menu-footer">
-                <a href="https://www.instagram.com/kaizenn.co/" target="_blank" class="mobile-social">@kaizenn.co</a>
+                <a href="https://www.instagram.com/kaizenn.co/" target="_blank" rel="noopener" class="mobile-social">@kaizenn.co</a>
             </div>
         </div>
     </div>
 
-    <!-- Cart Sidebar -->
     <div id="cart-overlay" class="cart-overlay"></div>
-    <aside id="cart-sidebar" class="cart-sidebar">
+    <aside id="cart-sidebar" class="cart-sidebar" aria-label="Shopping cart">
         <div class="cart-header">
             <h3>YOUR BAG <span class="cart-header-jp">袋</span></h3>
             <button id="cart-close" class="cart-close" aria-label="Close cart">&times;</button>
@@ -93,21 +97,17 @@
                 <span>TOTAL</span>
                 <span id="cart-total-price">₹0</span>
             </div>
-            <a href="https://wa.me/6294685973" target="_blank" class="btn-primary btn-checkout">
-                CHECKOUT VIA WHATSAPP
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            </a>
+            <a href="checkout.html" class="btn-primary btn-checkout">PROCEED TO CHECKOUT</a>
         </div>
     </aside>
 
-    <!-- Hero Section -->
     <section id="hero" class="hero">
         <div class="hero-bg-overlay"></div>
         <div class="hero-grain"></div>
         <div class="hero-content">
             <div class="hero-badge">
                 <span class="badge-dot"></span>
-                NEW DROP — SUMMER '26
+                NEW DROP - SUMMER '26
             </div>
             <h1 class="hero-title">
                 <span class="hero-title-line" data-animation="slide-up">
@@ -129,9 +129,7 @@
                     EXPLORE COLLECTION
                     <span class="btn-arrow">→</span>
                 </a>
-                <a href="#drops" class="btn-secondary">
-                    LATEST DROPS
-                </a>
+                <a href="#drops" class="btn-secondary">LATEST DROPS</a>
             </div>
         </div>
         <div class="hero-scroll-indicator" data-animation="fade-up" style="--delay: 0.7s">
@@ -140,63 +138,55 @@
         </div>
         <div class="hero-marquee">
             <div class="marquee-track">
-                <span>KAIZEN 改善 CONTINUOUS IMPROVEMENT ★ STREETWEAR ★ URBAN CULTURE ★ DM TO COP ★ </span>
-                <span>KAIZEN 改善 CONTINUOUS IMPROVEMENT ★ STREETWEAR ★ URBAN CULTURE ★ DM TO COP ★ </span>
+                <span>KAIZEN 改善 CONTINUOUS IMPROVEMENT ★ STREETWEAR ★ URBAN CULTURE ★ LIMITED DROPS ★ </span>
+                <span>KAIZEN 改善 CONTINUOUS IMPROVEMENT ★ STREETWEAR ★ URBAN CULTURE ★ LIMITED DROPS ★ </span>
             </div>
         </div>
     </section>
 
-    <!-- Latest Drops / Featured -->
     <section id="drops" class="section drops-section">
         <div class="section-header">
             <span class="section-label">01 / LATEST</span>
             <h2 class="section-title">NEW <span class="accent">DROPS</span></h2>
-            <p class="section-desc">Fresh arrivals hand-picked for the streets. Limited stock — DM to cop before they're gone.</p>
+            <p class="section-desc">Fresh arrivals hand-picked for the streets. Limited stock, fast rotation, premium everyday presence.</p>
         </div>
         <div class="drops-grid">
-            <div class="drop-card drop-card-large" data-animation="reveal">
+            <article class="drop-card drop-card-large" data-animation="reveal">
                 <div class="drop-card-img">
-                    <img src="images/product1.png" alt="White & Black Jersey #1" loading="lazy">
-                    <div class="drop-card-overlay">
-                        <span class="drop-tag sold">SOLD OUT</span>
-                    </div>
+                    <img src="images/product1.png" alt="White and Black Jersey #1" loading="lazy" decoding="async">
+                    <div class="drop-card-overlay"><span class="drop-tag sold">SOLD OUT</span></div>
                 </div>
                 <div class="drop-card-info">
                     <h3>Jersey Tee #01</h3>
-                    <p>White & Black Colorblock</p>
+                    <p>White and Black Colorblock</p>
                     <span class="drop-price">₹549</span>
                 </div>
-            </div>
-            <div class="drop-card" data-animation="reveal" style="--delay: 0.1s">
+            </article>
+            <article class="drop-card" data-animation="reveal" style="--delay: 0.1s">
                 <div class="drop-card-img">
-                    <img src="images/product2.png" alt="Black Basketball Jersey #32" loading="lazy">
-                    <div class="drop-card-overlay">
-                        <span class="drop-tag available">AVAILABLE</span>
-                    </div>
+                    <img src="images/product2.png" alt="Black Basketball Jersey #32" loading="lazy" decoding="async">
+                    <div class="drop-card-overlay"><span class="drop-tag available">AVAILABLE</span></div>
                 </div>
                 <div class="drop-card-info">
                     <h3>Basketball Jersey #32</h3>
-                    <p>Black Mesh — Number 32</p>
+                    <p>Black Mesh - Number 32</p>
                     <span class="drop-price">₹449</span>
                 </div>
-            </div>
-            <div class="drop-card" data-animation="reveal" style="--delay: 0.2s">
+            </article>
+            <article class="drop-card" data-animation="reveal" style="--delay: 0.2s">
                 <div class="drop-card-img">
-                    <img src="images/product4.png" alt="Chicago Bulls Vintage Tee" loading="lazy">
-                    <div class="drop-card-overlay">
-                        <span class="drop-tag available">AVAILABLE</span>
-                    </div>
+                    <img src="images/product4.png" alt="Chicago Bulls Vintage Tee" loading="lazy" decoding="async">
+                    <div class="drop-card-overlay"><span class="drop-tag available">AVAILABLE</span></div>
                 </div>
                 <div class="drop-card-info">
                     <h3>Chicago Bulls Vintage Tee</h3>
-                    <p>Black — Rodman Graphics</p>
+                    <p>Black - Rodman Graphics</p>
                     <span class="drop-price">₹500</span>
                 </div>
-            </div>
+            </article>
         </div>
     </section>
 
-    <!-- Marquee Divider -->
     <div class="marquee-divider">
         <div class="marquee-track reverse">
             <span>★ JERSEYS ★ BAGGY JEANS ★ GRAPHIC TEES ★ TRACK PANTS ★ JACKETS ★ CORDUROY ★ </span>
@@ -204,15 +194,13 @@
         </div>
     </div>
 
-    <!-- Products / Shop Section -->
     <section id="products" class="section products-section">
         <div class="section-header">
             <span class="section-label">02 / COLLECTION</span>
             <h2 class="section-title">THE <span class="accent">SHOP</span></h2>
-            <p class="section-desc">Every piece curated with intention. Not thrift — original streetwear designed for those who move different.</p>
+            <p class="section-desc">Every piece curated with intention. Original streetwear designed for those who move different.</p>
         </div>
 
-        <!-- Category Filter -->
         <div class="filter-bar" id="filter-bar">
             <button class="filter-btn active" data-filter="all">ALL</button>
             <button class="filter-btn" data-filter="jerseys">JERSEYS</button>
@@ -221,13 +209,31 @@
             <button class="filter-btn" data-filter="outerwear">OUTERWEAR</button>
         </div>
 
-        <!-- Product Grid -->
-        <div class="products-grid" id="products-grid">
-            <!-- Products will be injected dynamically via JS -->
+        <div class="shop-controls" aria-label="Shop controls">
+            <label class="search-field" for="product-search">
+                <span>Search</span>
+                <input id="product-search" type="search" placeholder="Search jerseys, denim, tees..." autocomplete="off">
+            </label>
+            <label class="select-field" for="product-sort">
+                <span>Sort</span>
+                <select id="product-sort">
+                    <option value="featured">Featured</option>
+                    <option value="new">New arrivals</option>
+                    <option value="rating">Top rated</option>
+                    <option value="price-asc">Price: low to high</option>
+                    <option value="price-desc">Price: high to low</option>
+                </select>
+            </label>
+            <label class="stock-toggle">
+                <input id="stock-toggle" type="checkbox">
+                <span>In stock only</span>
+            </label>
+            <span id="product-count" class="product-count" aria-live="polite">6 pieces</span>
         </div>
+
+        <div class="products-grid" id="products-grid" aria-live="polite"></div>
     </section>
 
-    <!-- Stats / Social Proof -->
     <section class="stats-section">
         <div class="stats-grid">
             <div class="stat-item" data-animation="counter" data-target="20">
@@ -249,7 +255,6 @@
         </div>
     </section>
 
-    <!-- About Section -->
     <section id="about" class="section about-section">
         <div class="about-container">
             <div class="about-visual">
@@ -263,13 +268,13 @@
                 <h2 class="section-title">THE <span class="accent">PHILOSOPHY</span></h2>
                 <div class="about-text">
                     <p class="about-lead">
-                        <strong>KAIZEN</strong> (改善) — the Japanese philosophy of continuous improvement. We don't just sell clothes. We curate a lifestyle.
+                        <strong>KAIZEN</strong> (改善) - the Japanese philosophy of continuous improvement. We don't just sell clothes. We curate a lifestyle.
                     </p>
                     <p>
-                        Every piece in our collection is hand-selected for those who refuse to blend in. From vintage basketball jerseys to baggy shaded jeans, from graphic tees to premium suede jackets — each item represents the relentless pursuit of evolution.
+                        Every piece is selected for those who refuse to blend in. From vintage basketball jerseys to baggy shaded jeans, from graphic tees to premium suede jackets, each item represents the pursuit of evolution.
                     </p>
                     <p>
-                        Based in India, rooted in global street culture. Not thrift — original. Not ordinary — extraordinary.
+                        Based in India, rooted in global street culture. Not thrift, original. Not ordinary, extraordinary.
                     </p>
                 </div>
                 <div class="about-highlights">
@@ -277,21 +282,21 @@
                         <span class="highlight-icon">🔥</span>
                         <div>
                             <h4>Limited Drops</h4>
-                            <p>Each piece is limited. Once sold, it's gone forever.</p>
+                            <p>Each piece is limited. Once sold, it is gone from the rotation.</p>
                         </div>
                     </div>
                     <div class="highlight-item">
                         <span class="highlight-icon">📦</span>
                         <div>
                             <h4>Pan-India Shipping</h4>
-                            <p>We ship across India. Free shipping on select items.</p>
+                            <p>We ship across India with careful packaging and order updates.</p>
                         </div>
                     </div>
                     <div class="highlight-item">
                         <span class="highlight-icon">💬</span>
                         <div>
-                            <h4>DM to Cop</h4>
-                            <p>WhatsApp or Instagram DM to place your order.</p>
+                            <h4>Fast Support</h4>
+                            <p>WhatsApp or Instagram DM for fit, order, and drop questions.</p>
                         </div>
                     </div>
                 </div>
@@ -299,23 +304,22 @@
         </div>
     </section>
 
-    <!-- Instagram / Social Section -->
     <section class="social-section">
         <div class="section-header">
             <span class="section-label">04 / FOLLOW US</span>
             <h2 class="section-title">ON THE <span class="accent">GRAM</span></h2>
         </div>
-        <a href="https://www.instagram.com/kaizenn.co/" target="_blank" class="instagram-link">
+        <a href="https://www.instagram.com/kaizenn.co/" target="_blank" rel="noopener" class="instagram-link">
             <div class="instagram-grid">
-                <div class="insta-img"><img src="images/product1.png" alt="KAIZEN Product" loading="lazy"></div>
-                <div class="insta-img"><img src="images/product2.png" alt="KAIZEN Product" loading="lazy"></div>
-                <div class="insta-img"><img src="images/product3.png" alt="KAIZEN Product" loading="lazy"></div>
-                <div class="insta-img"><img src="images/product4.png" alt="KAIZEN Product" loading="lazy"></div>
-                <div class="insta-img"><img src="images/product5.png" alt="KAIZEN Product" loading="lazy"></div>
-                <div class="insta-img"><img src="images/product6.png" alt="KAIZEN Product" loading="lazy"></div>
+                <div class="insta-img"><img src="images/product1.png" alt="KAIZEN Product" loading="lazy" decoding="async"></div>
+                <div class="insta-img"><img src="images/product2.png" alt="KAIZEN Product" loading="lazy" decoding="async"></div>
+                <div class="insta-img"><img src="images/product3.png" alt="KAIZEN Product" loading="lazy" decoding="async"></div>
+                <div class="insta-img"><img src="images/product4.png" alt="KAIZEN Product" loading="lazy" decoding="async"></div>
+                <div class="insta-img"><img src="images/product5.png" alt="KAIZEN Product" loading="lazy" decoding="async"></div>
+                <div class="insta-img"><img src="images/product6.png" alt="KAIZEN Product" loading="lazy" decoding="async"></div>
             </div>
             <div class="instagram-overlay">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" aria-hidden="true">
                     <rect x="2" y="2" width="20" height="20" rx="5"/>
                     <circle cx="12" cy="12" r="5"/>
                     <circle cx="17.5" cy="6.5" r="1.5" fill="white" stroke="none"/>
@@ -325,28 +329,17 @@
         </a>
     </section>
 
-    <!-- Contact / CTA Section -->
     <section id="contact" class="section contact-section">
         <div class="contact-container">
             <div class="contact-content">
                 <span class="section-label">05 / GET IN TOUCH</span>
                 <h2 class="section-title">READY TO <span class="accent">COP?</span></h2>
                 <p class="contact-desc">
-                    Drop us a DM on Instagram or WhatsApp to place your order. We respond fast — because great streetwear shouldn't wait.
+                    Drop us a DM on Instagram or WhatsApp to place your order, ask about sizing, or get shipping support.
                 </p>
                 <div class="contact-actions">
-                    <a href="https://wa.me/6294685973" target="_blank" class="btn-primary btn-whatsapp">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                        WHATSAPP US
-                    </a>
-                    <a href="https://www.instagram.com/kaizenn.co/" target="_blank" class="btn-secondary btn-insta">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="2" width="20" height="20" rx="5"/>
-                            <circle cx="12" cy="12" r="5"/>
-                            <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/>
-                        </svg>
-                        DM ON INSTAGRAM
-                    </a>
+                    <a href="https://wa.me/6294685973" target="_blank" rel="noopener" class="btn-primary btn-whatsapp">WHATSAPP US</a>
+                    <a href="https://www.instagram.com/kaizenn.co/" target="_blank" rel="noopener" class="btn-secondary btn-insta">DM ON INSTAGRAM</a>
                 </div>
             </div>
             <div class="contact-visual">
@@ -355,7 +348,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-top">
@@ -375,41 +367,49 @@
                         <h4>KAIZEN</h4>
                         <a href="#about">About Us</a>
                         <a href="#contact">Contact</a>
-                        <a href="https://www.instagram.com/kaizenn.co/" target="_blank">Instagram</a>
-                        <a href="https://wa.me/6294685973" target="_blank">WhatsApp</a>
+                        <a href="https://www.instagram.com/kaizenn.co/" target="_blank" rel="noopener">Instagram</a>
+                        <a href="https://wa.me/6294685973" target="_blank" rel="noopener">WhatsApp</a>
                     </div>
                     <div class="footer-col">
                         <h4>SUPPORT</h4>
-                        <a href="#">Shipping Policy</a>
-                        <a href="#">Returns</a>
-                        <a href="#">Size Guide</a>
-                        <a href="#">FAQ</a>
+                        <a href="#contact">Shipping Policy</a>
+                        <a href="#contact">Returns</a>
+                        <a href="product.html?id=3">Size Guide</a>
+                        <a href="#contact">FAQ</a>
                     </div>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2026 KAIZEN 改善. All rights reserved.</p>
                 <div class="footer-socials">
-                    <a href="https://www.instagram.com/kaizenn.co/" target="_blank" aria-label="Instagram">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="2" width="20" height="20" rx="5"/>
-                            <circle cx="12" cy="12" r="5"/>
-                            <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/>
-                        </svg>
-                    </a>
-                    <a href="https://wa.me/6294685973" target="_blank" aria-label="WhatsApp">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                    </a>
+                    <a href="https://www.instagram.com/kaizenn.co/" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+                    <a href="https://wa.me/6294685973" target="_blank" rel="noopener" aria-label="WhatsApp">WA</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Toast Notification -->
     <div id="toast" class="toast">
         <span id="toast-message">Added to bag!</span>
     </div>
 
+    <nav class="bottom-nav" aria-label="Mobile primary navigation">
+        <a href="#hero" class="active">Home</a>
+        <a href="#products">Shop</a>
+        <button id="bottom-cart-btn" type="button">Bag</button>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "KAIZEN",
+        "url": "index.html",
+        "logo": "images/logo.png",
+        "sameAs": ["https://www.instagram.com/kaizenn.co/"]
+    }
+    </script>
     <script src="data.js"></script>
     <script src="cart.js"></script>
     <script src="script.js"></script>

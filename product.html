@@ -3,31 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAIZEN 改善 — Product Details</title>
+    <title>KAIZEN 改善 - Product Details</title>
+    <meta name="description" content="Shop premium KAIZEN streetwear with size selection, inventory-aware cart, and secure checkout flow.">
+    <link rel="canonical" href="product.html">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/svg+xml" href="images/logo-mark.svg">
     <style>
-        /* Product Page Specific Styles */
         .product-page {
             padding: 120px 2rem 4rem 2rem;
             max-width: 1400px;
             margin: 0 auto;
             min-height: 80vh;
         }
-        
+
         .pdp-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: minmax(0, 1fr) minmax(340px, 0.9fr);
             gap: 4rem;
             align-items: start;
             opacity: 0;
             transform: translateY(20px);
             animation: fadeUp 0.6s ease forwards;
         }
-        
+
         .pdp-image-container {
             background: var(--bg-card);
             border-radius: var(--radius-lg);
@@ -35,7 +36,7 @@
             border: 1px solid var(--border);
             position: relative;
         }
-        
+
         .pdp-image-container img {
             width: 100%;
             height: auto;
@@ -47,90 +48,115 @@
             top: 20px;
             left: 20px;
         }
-        
+
         .pdp-details {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.25rem;
         }
-        
+
+        .breadcrumb {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+        }
+
         .pdp-tag {
             color: var(--text-secondary);
             font-size: 0.8rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
         }
-        
+
         .pdp-title {
-            font-size: 3rem;
-            line-height: 1.1;
+            font-size: clamp(2.2rem, 5vw, 3.6rem);
+            line-height: 1.05;
             font-weight: 800;
         }
-        
+
         .pdp-price {
             font-size: 1.8rem;
             color: var(--accent-warm);
             font-weight: 700;
         }
-        
+
+        .pdp-rating {
+            display: flex;
+            gap: 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
         .pdp-desc {
             color: var(--text-secondary);
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             line-height: 1.8;
             border-top: 1px solid var(--border);
             border-bottom: 1px solid var(--border);
             padding: 1.5rem 0;
         }
-        
-        .pdp-sizes {
-            margin-top: 1rem;
+
+        .pdp-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
         }
-        
+
+        .pdp-meta-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 0.9rem;
+        }
+
+        .pdp-meta-item span {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.68rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .pdp-meta-item strong {
+            font-size: 0.9rem;
+        }
+
         .pdp-sizes h4 {
             margin-bottom: 1rem;
             font-size: 0.9rem;
             letter-spacing: 0.1em;
             color: var(--text-secondary);
         }
-        
+
         .size-options {
             display: flex;
             gap: 0.8rem;
             flex-wrap: wrap;
-        }
-        
-        .size-btn {
-            width: 50px;
-            height: 50px;
-            border: 1px solid var(--border);
-            background: transparent;
-            color: var(--text-primary);
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-            transition: all var(--transition-fast);
-        }
-        
-        .size-btn:hover:not(:disabled) {
-            border-color: var(--accent-warm);
-            color: var(--accent-warm);
-        }
-        
-        .size-btn.active {
-            background: var(--accent-warm);
-            border-color: var(--accent-warm);
-            color: var(--bg-primary);
+            margin-bottom: 0.6rem;
         }
 
         .size-btn:disabled {
-            opacity: 0.3;
+            opacity: 0.35;
             cursor: not-allowed;
             text-decoration: line-through;
         }
-        
+
+        .variant-note {
+            min-height: 1.4em;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
         .pdp-actions {
             display: flex;
             gap: 1rem;
-            margin-top: 2rem;
+            margin-top: 1rem;
         }
 
         .pdp-actions .btn-primary {
@@ -138,11 +164,40 @@
             justify-content: center;
         }
 
+        .pdp-info-panels {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .pdp-info-panel {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            color: var(--text-secondary);
+            background: var(--bg-card);
+        }
+
+        .related-section {
+            margin-top: 5rem;
+        }
+
+        .related-section h2 {
+            font-size: 1.4rem;
+            letter-spacing: 0.12em;
+            margin-bottom: 1.5rem;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
         .not-found {
             text-align: center;
             padding: 100px 20px;
         }
-        
+
         .not-found h1 {
             font-size: 4rem;
             margin-bottom: 20px;
@@ -150,21 +205,21 @@
         }
 
         @media (max-width: 900px) {
-            .pdp-container {
+            .pdp-container,
+            .related-grid {
                 grid-template-columns: 1fr;
                 gap: 2rem;
             }
-            .pdp-title {
-                font-size: 2.2rem;
-            }
-            .pdp-actions {
+
+            .pdp-actions,
+            .pdp-meta-grid {
+                grid-template-columns: 1fr;
                 flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Preloader -->
     <div id="preloader">
         <div class="preloader-inner">
             <div class="preloader-logo">改善</div>
@@ -173,8 +228,7 @@
         </div>
     </div>
 
-    <!-- Navigation -->
-    <nav id="navbar">
+    <nav id="navbar" class="scrolled">
         <div class="nav-container">
             <a href="index.html#hero" class="nav-logo">
                 <img src="images/logo-mark.svg" alt="KAIZEN Logo" class="nav-logo-img">
@@ -189,54 +243,42 @@
             </ul>
             <div class="nav-actions">
                 <button id="cart-btn" class="cart-btn" aria-label="Shopping cart">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
                         <line x1="3" y1="6" x2="21" y2="6"/>
                         <path d="M16 10a4 4 0 0 1-8 0"/>
                     </svg>
                     <span id="cart-count" class="cart-count">0</span>
                 </button>
-                <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+                    <span class="theme-toggle-icon">◐</span>
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- Cart Sidebar -->
     <div id="cart-overlay" class="cart-overlay"></div>
-    <aside id="cart-sidebar" class="cart-sidebar">
+    <aside id="cart-sidebar" class="cart-sidebar" aria-label="Shopping cart">
         <div class="cart-header">
             <h3>YOUR BAG <span class="cart-header-jp">袋</span></h3>
             <button id="cart-close" class="cart-close" aria-label="Close cart">&times;</button>
         </div>
-        <div id="cart-items" class="cart-items">
-            <!-- Rendered by cart.js -->
-        </div>
+        <div id="cart-items" class="cart-items"></div>
         <div id="cart-footer" class="cart-footer" style="display:none;">
             <div class="cart-total">
                 <span>TOTAL</span>
                 <span id="cart-total-price">₹0</span>
             </div>
-            <a href="checkout.html" class="btn-primary btn-checkout">
-                PROCEED TO CHECKOUT
-            </a>
+            <a href="checkout.html" class="btn-primary btn-checkout">PROCEED TO CHECKOUT</a>
         </div>
     </aside>
 
-    <!-- Product Content -->
-    <main class="product-page" id="product-root">
-        <!-- Injected via JS -->
-    </main>
+    <main class="product-page" id="product-root"></main>
 
-    <!-- Toast Notification -->
     <div id="toast" class="toast">
         <span id="toast-message">Added to bag!</span>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-top">
@@ -253,116 +295,152 @@
 
     <script src="data.js"></script>
     <script src="cart.js"></script>
+    <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const productId = urlParams.get('id');
             const root = document.getElementById('product-root');
 
+            function renderNotFound() {
+                root.innerHTML = '<div class="not-found"><h1>404</h1><p>Product not found.</p><a href="index.html#products" class="btn-primary" style="margin-top:2rem">RETURN TO SHOP</a></div>';
+            }
+
             if (!productId || typeof getProductById !== 'function') {
-                root.innerHTML = '<div class="not-found"><h1>404</h1><p>Product not found.</p><a href="index.html" class="btn-primary" style="margin-top:2rem">RETURN TO SHOP</a></div>';
+                renderNotFound();
                 return;
             }
 
             const product = getProductById(productId);
-
             if (!product) {
-                root.innerHTML = '<div class="not-found"><h1>404</h1><p>Product not found.</p><a href="index.html" class="btn-primary" style="margin-top:2rem">RETURN TO SHOP</a></div>';
+                renderNotFound();
                 return;
             }
 
-            document.title = `KAIZEN 改善 — ${sanitize(product.name)}`;
+            const available = isProductAvailable(product);
+            const defaultSize = getDefaultAvailableSize(product);
+            document.title = `KAIZEN 改善 - ${product.name}`;
+            document.querySelector('meta[name="description"]').setAttribute('content', product.desc);
 
-            let badgeHtml = '';
-            if (product.badge) {
-                badgeHtml = `<span class="product-badge ${sanitize(product.badgeClass)} pdp-badge">${sanitize(product.badge)}</span>`;
-            }
+            const badgeHtml = product.badge
+                ? `<span class="product-badge ${sanitize(product.badgeClass)} pdp-badge">${sanitize(product.badge)}</span>`
+                : '';
 
-            let sizesHtml = '';
-            if (product.sizes) {
-                const buttons = product.sizes.map(sizeObj => {
-                    const size = typeof sizeObj === 'object' ? sizeObj.size : sizeObj;
-                    const disabled = typeof sizeObj === 'object' && sizeObj.soldOut ? 'disabled' : '';
-                    return `<button class="size-btn" ${disabled}>${sanitize(String(size))}</button>`;
-                }).join('');
-                
-                sizesHtml = `
-                    <div class="pdp-sizes">
-                        <h4>SELECT SIZE</h4>
-                        <div class="size-options">
-                            ${buttons}
-                        </div>
-                    </div>
-                `;
-            } else {
-                // Default sizes if none specified in DB
-                sizesHtml = `
-                    <div class="pdp-sizes">
-                        <h4>SELECT SIZE</h4>
-                        <div class="size-options">
-                            <button class="size-btn">S</button>
-                            <button class="size-btn">M</button>
-                            <button class="size-btn active">L</button>
-                            <button class="size-btn">XL</button>
-                            <button class="size-btn">XXL</button>
-                        </div>
-                    </div>
-                `;
-            }
+            const sizesHtml = Array.isArray(product.sizes)
+                ? product.sizes.map(size => {
+                    const disabled = Number(size.stock) <= 0 ? 'disabled' : '';
+                    const active = String(size.size) === String(defaultSize) ? 'active' : '';
+                    return `<button class="size-btn ${active}" ${disabled} data-size="${sanitize(size.size)}" data-stock="${Number(size.stock)}">${sanitize(size.size)}</button>`;
+                }).join('')
+                : '<button class="size-btn active" data-size="OS" data-stock="99">OS</button>';
 
-            const addToCartBtnState = product.available 
-                ? `<button class="btn-primary btn-add-cart" id="pdp-add-cart" data-id="${sanitize(product.id)}" data-name="${sanitize(product.name)}" data-price="${product.price}" data-img="${sanitize(product.img)}">ADD TO BAG</button>` 
-                : `<button class="btn-primary" disabled style="opacity: 0.5; cursor: not-allowed;">SOLD OUT</button>`;
+            const addToCartBtnState = available
+                ? `<button class="btn-primary btn-add-cart" id="pdp-add-cart" data-id="${sanitize(product.id)}" data-size="${sanitize(defaultSize)}">ADD TO BAG</button>`
+                : '<button class="btn-primary" disabled style="opacity: 0.5; cursor: not-allowed;">SOLD OUT</button>';
+
+            const related = getAllProducts()
+                .filter(item => item.id !== product.id && (item.category === product.category || item.collection === product.collection))
+                .slice(0, 3);
 
             root.innerHTML = `
+                <div class="breadcrumb"><a href="index.html#products">Shop</a> / ${sanitize(product.category)} / ${sanitize(product.name)}</div>
                 <div class="pdp-container">
                     <div class="pdp-image-container">
                         ${badgeHtml}
-                        <img src="${sanitize(product.img)}" alt="${sanitize(product.name)}">
+                        <img src="${sanitize(product.img)}" alt="${sanitize(product.name)}" decoding="async">
                     </div>
                     <div class="pdp-details">
-                        <span class="pdp-tag">${sanitize(product.tag)}</span>
+                        <span class="pdp-tag">${sanitize(product.collection)} / ${sanitize(product.tag)}</span>
                         <h1 class="pdp-title">${sanitize(product.name)}</h1>
-                        <div class="pdp-price">₹${product.price.toLocaleString('en-IN')}</div>
-                        <div class="pdp-desc">
-                            ${sanitize(product.desc)}
+                        <div class="pdp-price">${formatPrice(product.price)}</div>
+                        <div class="pdp-rating">
+                            <span>★ ${product.rating.toFixed(1)}</span>
+                            <span>${product.reviewCount} reviews</span>
                         </div>
-                        ${sizesHtml}
-                        <div class="pdp-actions">
-                            ${addToCartBtnState}
+                        <div class="pdp-desc">${sanitize(product.desc)}</div>
+                        <div class="pdp-meta-grid">
+                            <div class="pdp-meta-item"><span>SKU</span><strong>${sanitize(product.sku)}</strong></div>
+                            <div class="pdp-meta-item"><span>Material</span><strong>${sanitize(product.material)}</strong></div>
+                            <div class="pdp-meta-item"><span>Inventory</span><strong>${available ? `${product.inventory} available` : 'Sold out'}</strong></div>
+                            <div class="pdp-meta-item"><span>Color</span><strong>${sanitize(product.colors.join(', '))}</strong></div>
+                        </div>
+                        <div class="pdp-sizes">
+                            <h4>SELECT SIZE</h4>
+                            <div class="size-options">${sizesHtml}</div>
+                            <p class="variant-note" id="variant-note">${available ? 'Choose your size before adding to bag.' : 'This piece is sold out.'}</p>
+                        </div>
+                        <div class="pdp-actions">${addToCartBtnState}</div>
+                        <div class="pdp-info-panels">
+                            <div class="pdp-info-panel">Free shipping support over WhatsApp. Orders are confirmed before dispatch.</div>
+                            <div class="pdp-info-panel">Need fit help? DM us your height and preferred silhouette.</div>
                         </div>
                     </div>
                 </div>
+                ${related.length ? `
+                    <section class="related-section">
+                        <h2>RELATED PIECES</h2>
+                        <div class="related-grid">
+                            ${related.map(item => `
+                                <a class="product-card" href="product.html?id=${sanitize(item.id)}">
+                                    <div class="product-img-wrapper">
+                                        <img src="${sanitize(item.img)}" alt="${sanitize(item.name)}" loading="lazy" decoding="async">
+                                        ${item.badge ? `<span class="product-badge ${sanitize(item.badgeClass)}">${sanitize(item.badge)}</span>` : ''}
+                                    </div>
+                                    <div class="product-info">
+                                        <h3 class="product-name">${sanitize(item.name)}</h3>
+                                        <div class="product-meta">
+                                            <span class="product-price">${formatPrice(item.price)}</span>
+                                            <span class="product-tag">${sanitize(item.tag)}</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </section>
+                ` : ''}
+                <script type="application/ld+json" id="product-schema">
+                    ${JSON.stringify({
+                        '@context': 'https://schema.org',
+                        '@type': 'Product',
+                        name: product.name,
+                        image: product.img,
+                        description: product.desc,
+                        sku: product.sku,
+                        brand: { '@type': 'Brand', name: product.brand },
+                        offers: {
+                            '@type': 'Offer',
+                            priceCurrency: 'INR',
+                            price: product.price,
+                            availability: available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
+                        },
+                        aggregateRating: {
+                            '@type': 'AggregateRating',
+                            ratingValue: product.rating,
+                            reviewCount: product.reviewCount
+                        }
+                    })}
+                <\/script>
             `;
 
-            // Size selection logic
+            const note = document.getElementById('variant-note');
+            const addButton = document.getElementById('pdp-add-cart');
             const sizeBtns = root.querySelectorAll('.size-btn:not(:disabled)');
-            if(sizeBtns.length > 0 && !root.querySelector('.size-btn.active')) {
-                sizeBtns[0].classList.add('active'); // default select first
-            }
 
             sizeBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
-                    sizeBtns.forEach(b => b.classList.remove('active'));
+                    sizeBtns.forEach(button => button.classList.remove('active'));
                     btn.classList.add('active');
+                    if (addButton) addButton.dataset.size = btn.dataset.size;
+                    if (note) note.textContent = `${btn.dataset.stock} in stock for size ${btn.dataset.size}.`;
                 });
             });
 
-            // Prevent default global add to cart from capturing, or let it capture if we just rely on event bubbling.
-            // Since cart.js adds a global click listener for '.btn-add-cart', we don't need to add another listener here!
-            // Wait, but we might want to attach selected size. 
-            // For a basic Shopify flow, we would append size to the product ID or name in the cart.
-            // Let's keep it simple for now as the original code didn't handle size in cart.
-            
-            // Re-initialize cart UI to bind elements
-            if(typeof updateCartUI === 'function') updateCartUI();
-            
-            // Remove preloader
-            setTimeout(() => {
-                const pre = document.getElementById('preloader');
-                if(pre) pre.classList.add('hidden');
-                document.body.style.overflow = '';
-            }, 500);
+            if (defaultSize && note) {
+                const selected = root.querySelector(`.size-btn[data-size="${CSS.escape(defaultSize)}"]`);
+                if (selected) note.textContent = `${selected.dataset.stock} in stock for size ${defaultSize}.`;
+            }
+
+            if (typeof updateCartUI === 'function') updateCartUI();
         });
     </script>
 </body>

@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAIZEN 改善 — Secure Checkout</title>
+    <title>KAIZEN 改善 - Secure Checkout</title>
+    <meta name="description" content="Secure KAIZEN checkout for streetwear orders with validated cart, shipping information, and order confirmation.">
+    <link rel="canonical" href="checkout.html">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
@@ -21,6 +23,7 @@
             display: grid;
             grid-template-columns: 1.5fr 1fr;
             gap: 4rem;
+            align-items: start;
         }
 
         .checkout-section {
@@ -28,6 +31,10 @@
             padding: 2rem;
             border-radius: var(--radius-lg);
             border: 1px solid var(--border);
+        }
+
+        .checkout-section + .checkout-section {
+            margin-top: 2rem;
         }
 
         .checkout-section h2 {
@@ -54,9 +61,12 @@
             font-size: 0.85rem;
             color: var(--text-secondary);
             letter-spacing: 0.1em;
+            text-transform: uppercase;
         }
 
-        .form-group input, .form-group select {
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
             width: 100%;
             padding: 1rem;
             background: var(--bg-primary);
@@ -65,12 +75,25 @@
             color: var(--text-primary);
             font-family: inherit;
             font-size: 1rem;
-            transition: border-color var(--transition-fast);
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
         }
 
-        .form-group input:focus, .form-group select:focus {
+        .form-group textarea {
+            min-height: 96px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
             border-color: var(--accent-warm);
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.12);
+        }
+
+        .checkout-right {
+            position: sticky;
+            top: 100px;
         }
 
         .checkout-summary-item {
@@ -138,11 +161,34 @@
             margin-top: 2rem;
         }
 
+        .checkout-note {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
         .error-message {
             color: #e74c3c;
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            margin-top: 1rem;
             display: none;
+        }
+
+        .trust-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .trust-pill {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 0.8rem;
+            color: var(--text-secondary);
+            font-size: 0.78rem;
+            text-align: center;
+            background: var(--bg-secondary);
         }
 
         .success-overlay {
@@ -154,6 +200,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            text-align: center;
+            padding: 2rem;
             opacity: 0;
             pointer-events: none;
             transition: opacity var(--transition-smooth);
@@ -165,7 +213,7 @@
         }
 
         .success-overlay h1 {
-            font-size: 3rem;
+            font-size: clamp(2.4rem, 8vw, 4rem);
             color: var(--accent-warm);
             margin-bottom: 1rem;
         }
@@ -173,95 +221,107 @@
         .success-overlay p {
             color: var(--text-secondary);
             margin-bottom: 2rem;
+            max-width: 520px;
         }
 
         @media (max-width: 900px) {
-            .checkout-grid {
+            .checkout-grid,
+            .form-row,
+            .trust-row {
                 grid-template-columns: 1fr;
             }
-            .form-row {
-                grid-template-columns: 1fr;
-                gap: 0;
+
+            .checkout-right {
+                position: static;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav id="navbar" class="scrolled">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">
                 <img src="images/logo-mark.svg" alt="KAIZEN Logo" class="nav-logo-img">
                 <span class="nav-logo-text">KAIZEN</span>
+                <span class="nav-logo-jp">改善</span>
             </a>
             <div class="nav-actions">
-                <a href="index.html" class="btn-secondary btn-sm" style="font-size:0.7rem">RETURN TO SHOP</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+                    <span class="theme-toggle-icon">◐</span>
+                </button>
+                <a href="index.html#products" class="btn-secondary btn-sm" style="font-size:0.7rem">RETURN TO SHOP</a>
             </div>
         </div>
     </nav>
 
     <main class="checkout-page">
         <form id="checkout-form" class="checkout-grid">
-            <!-- Left: Form -->
             <div class="checkout-left">
-                <div class="checkout-section">
+                <div class="trust-row">
+                    <div class="trust-pill">Validated cart</div>
+                    <div class="trust-pill">Pan-India shipping</div>
+                    <div class="trust-pill">Order confirmation</div>
+                </div>
+
+                <section class="checkout-section">
                     <h2>Shipping Information</h2>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="fname">First Name *</label>
-                            <input type="text" id="fname" required minlength="2" maxlength="50" pattern="^[a-zA-Z\\s]+$">
+                            <input type="text" id="fname" name="firstName" required minlength="2" maxlength="50" pattern="^[a-zA-Z\\s]+$" autocomplete="given-name">
                         </div>
                         <div class="form-group">
                             <label for="lname">Last Name *</label>
-                            <input type="text" id="lname" required minlength="2" maxlength="50" pattern="^[a-zA-Z\\s]+$">
+                            <input type="text" id="lname" name="lastName" required minlength="2" maxlength="50" pattern="^[a-zA-Z\\s]+$" autocomplete="family-name">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="email">Email Address *</label>
-                        <input type="email" id="email" required>
+                        <input type="email" id="email" name="email" required autocomplete="email">
                     </div>
                     <div class="form-group">
                         <label for="phone">Phone Number *</label>
-                        <input type="tel" id="phone" required pattern="^[0-9]{10}$" placeholder="10 digit mobile number">
+                        <input type="tel" id="phone" name="phone" required pattern="^[0-9]{10}$" placeholder="10 digit mobile number" autocomplete="tel">
                     </div>
                     <div class="form-group">
                         <label for="address">Street Address *</label>
-                        <input type="text" id="address" required minlength="5" maxlength="100">
+                        <input type="text" id="address" name="address" required minlength="5" maxlength="120" autocomplete="street-address">
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="city">City *</label>
-                            <input type="text" id="city" required minlength="2" maxlength="50">
+                            <input type="text" id="city" name="city" required minlength="2" maxlength="50" autocomplete="address-level2">
                         </div>
                         <div class="form-group">
                             <label for="pin">PIN Code *</label>
-                            <input type="text" id="pin" required pattern="^[0-9]{6}$" placeholder="6 digit PIN code">
+                            <input type="text" id="pin" name="pin" required pattern="^[0-9]{6}$" placeholder="6 digit PIN code" autocomplete="postal-code">
                         </div>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label for="notes">Order Notes</label>
+                        <textarea id="notes" name="notes" maxlength="240" placeholder="Fit preference, delivery notes, or WhatsApp instructions"></textarea>
+                    </div>
+                </section>
 
-                <div class="checkout-section" style="margin-top: 2rem;">
+                <section class="checkout-section">
                     <h2>Payment Options</h2>
-                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size:0.9rem;">
-                        This is a secure checkout simulation. We will process your order via Cash on Delivery or send a UPI link to your WhatsApp.
+                    <p class="checkout-note">
+                        This static storefront records a local order confirmation. In production this step should be connected to a server, payment gateway, fraud checks, and order management.
                     </p>
                     <div class="form-group">
                         <label for="payment">Select Method *</label>
-                        <select id="payment" required>
+                        <select id="payment" name="payment" required>
                             <option value="cod">Cash on Delivery</option>
-                            <option value="upi">UPI / Online (via WhatsApp)</option>
+                            <option value="upi">UPI / Online via WhatsApp</option>
                         </select>
                     </div>
-                </div>
+                </section>
             </div>
 
-            <!-- Right: Order Summary -->
-            <div class="checkout-right">
-                <div class="checkout-section">
+            <aside class="checkout-right">
+                <section class="checkout-section">
                     <h2>Order Summary</h2>
-                    <div id="checkout-items">
-                        <!-- Injected via JS -->
-                    </div>
+                    <div id="checkout-items"></div>
                     <div class="summary-totals">
                         <div class="summary-row">
                             <span>Subtotal</span>
@@ -269,7 +329,11 @@
                         </div>
                         <div class="summary-row">
                             <span>Shipping</span>
-                            <span>FREE</span>
+                            <span id="summary-shipping">FREE</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Estimated taxes</span>
+                            <span>Included</span>
                         </div>
                         <div class="summary-row total">
                             <span>Total</span>
@@ -278,68 +342,95 @@
                     </div>
                     <button type="submit" class="btn-primary btn-submit">
                         PLACE ORDER
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:8px"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        <span aria-hidden="true">→</span>
                     </button>
                     <div id="form-error" class="error-message">Please fill all required fields correctly.</div>
-                </div>
-            </div>
+                </section>
+            </aside>
         </form>
     </main>
 
     <div id="success-screen" class="success-overlay">
         <h1>ORDER PLACED</h1>
-        <p>Thank you for copping from KAIZEN 改善. We'll contact you shortly.</p>
-        <a href="index.html" class="btn-primary">CONTINUE SHOPPING</a>
+        <p id="success-copy">Thank you for copping from KAIZEN 改善. We'll contact you shortly.</p>
+        <a href="index.html#products" class="btn-primary">CONTINUE SHOPPING</a>
     </div>
 
-    <!-- We need data.js for security validation -->
     <script src="data.js"></script>
     <script>
-        // Simple XSS Sanitizer for rendering
         const sanitize = (str) => {
-            if (!str) return '';
+            if (str === null || str === undefined) return '';
             const temp = document.createElement('div');
-            temp.textContent = str;
+            temp.textContent = String(str);
             return temp.innerHTML;
         };
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Load and strictly validate cart data
-            let rawCart = JSON.parse(localStorage.getItem('kaizen_cart')) || [];
-            
-            // SECURITY: Deep validation of local storage against database
-            const secureCart = rawCart.map(item => {
-                const dbProduct = getProductById(item.id);
-                if (dbProduct) {
-                    return {
-                        id: dbProduct.id,
-                        name: dbProduct.name,
-                        price: dbProduct.price,
-                        img: dbProduct.img,
-                        qty: Math.max(1, parseInt(item.qty) || 1)
-                    };
-                }
-                return null;
-            }).filter(item => item !== null);
+        function parseCart() {
+            try {
+                const parsed = JSON.parse(localStorage.getItem('kaizen_cart')) || [];
+                return Array.isArray(parsed) ? parsed : [];
+            } catch {
+                return [];
+            }
+        }
 
-            // Re-save secure cart to wipe out tampered data
+        function normalizeCheckoutCart(rawCart) {
+            return rawCart.map(item => {
+                const dbProduct = getProductById(item.id);
+                if (!dbProduct || !isProductAvailable(dbProduct)) return null;
+
+                const size = item.size || getDefaultAvailableSize(dbProduct) || 'OS';
+                const variant = getProductVariant(dbProduct, size);
+                if (variant && Number(variant.stock) <= 0) return null;
+
+                const maxQty = variant ? Number(variant.stock) : Number(dbProduct.inventory);
+                const qty = Math.min(Math.max(1, parseInt(item.qty, 10) || 1), maxQty);
+
+                return {
+                    key: `${dbProduct.id}:${size}`,
+                    id: dbProduct.id,
+                    sku: dbProduct.sku,
+                    name: dbProduct.name,
+                    price: dbProduct.price,
+                    img: dbProduct.img,
+                    size,
+                    qty
+                };
+            }).filter(Boolean);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('kaizen_theme');
+            const themeToggle = document.getElementById('theme-toggle');
+            if (savedTheme === 'light') document.documentElement.classList.add('theme-light');
+            if (themeToggle) {
+                themeToggle.setAttribute('aria-pressed', document.documentElement.classList.contains('theme-light'));
+                themeToggle.addEventListener('click', () => {
+                    const isLight = document.documentElement.classList.toggle('theme-light');
+                    localStorage.setItem('kaizen_theme', isLight ? 'light' : 'dark');
+                    themeToggle.setAttribute('aria-pressed', String(isLight));
+                });
+            }
+
+            const secureCart = normalizeCheckoutCart(parseCart());
             localStorage.setItem('kaizen_cart', JSON.stringify(secureCart));
 
             if (secureCart.length === 0) {
                 document.querySelector('.checkout-page').innerHTML = `
                     <div style="text-align:center; padding: 100px 20px;">
                         <h2>YOUR BAG IS EMPTY</h2>
-                        <a href="index.html" class="btn-primary" style="margin-top:2rem">RETURN TO SHOP</a>
+                        <p style="color: var(--text-secondary); margin-top: 1rem;">Add a piece before starting checkout.</p>
+                        <a href="index.html#products" class="btn-primary" style="margin-top:2rem">RETURN TO SHOP</a>
                     </div>
                 `;
                 return;
             }
 
-            // Render Items
             const itemsContainer = document.getElementById('checkout-items');
             const subtotalEl = document.getElementById('summary-subtotal');
             const totalEl = document.getElementById('summary-total');
-
+            const form = document.getElementById('checkout-form');
+            const errorMsg = document.getElementById('form-error');
             let total = 0;
 
             itemsContainer.innerHTML = secureCart.map(item => {
@@ -350,43 +441,49 @@
                         <img src="${sanitize(item.img)}" alt="${sanitize(item.name)}" class="summary-img">
                         <div class="summary-details">
                             <span class="summary-name">${sanitize(item.name)}</span>
-                            <span class="summary-qty">Qty: ${item.qty}</span>
+                            <span class="summary-qty">Size ${sanitize(item.size)} · Qty ${item.qty} · ${sanitize(item.sku)}</span>
                         </div>
-                        <span class="summary-price">₹${itemTotal.toLocaleString('en-IN')}</span>
+                        <span class="summary-price">${formatPrice(itemTotal)}</span>
                     </div>
                 `;
             }).join('');
 
-            subtotalEl.textContent = `₹${total.toLocaleString('en-IN')}`;
-            totalEl.textContent = `₹${total.toLocaleString('en-IN')}`;
-
-            // Form Submission
-            const form = document.getElementById('checkout-form');
-            const errorMsg = document.getElementById('form-error');
+            subtotalEl.textContent = formatPrice(total);
+            totalEl.textContent = formatPrice(total);
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
-                
-                // Form is already validated by HTML5 attributes (pattern, minlength, etc.)
-                // But we check validity again to be safe
+
                 if (!form.checkValidity()) {
                     errorMsg.style.display = 'block';
+                    form.reportValidity();
                     return;
                 }
 
                 errorMsg.style.display = 'none';
 
-                // In a real app, send securely structured data to backend here.
-                // Since this is mock, we just clear cart and show success.
+                const formData = new FormData(form);
+                const orderId = `KZN-${Date.now().toString().slice(-8)}`;
+                const order = {
+                    id: orderId,
+                    createdAt: new Date().toISOString(),
+                    items: secureCart,
+                    total,
+                    customer: Object.fromEntries(formData.entries())
+                };
+
+                localStorage.setItem('kaizen_last_order', JSON.stringify(order));
                 localStorage.removeItem('kaizen_cart');
-                
+
                 const btn = form.querySelector('.btn-submit');
                 btn.innerHTML = 'PROCESSING...';
+                btn.disabled = true;
                 btn.style.opacity = '0.7';
-                
+
                 setTimeout(() => {
+                    document.getElementById('success-copy').textContent = `Order ${orderId} is confirmed. KAIZEN will contact you shortly for final dispatch details.`;
                     document.getElementById('success-screen').classList.add('active');
-                }, 1500);
+                }, 900);
             });
         });
     </script>

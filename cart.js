@@ -2,61 +2,127 @@
 // GLOBAL CART SYSTEM
 // ============================
 
-// Basic XSS sanitizer
 function sanitize(str) {
-    if (!str) return '';
+    if (str === null || str === undefined) return '';
     const temp = document.createElement('div');
-    temp.textContent = str;
+    temp.textContent = String(str);
     return temp.innerHTML;
 }
 
-let cart = JSON.parse(localStorage.getItem('kaizen_cart')) || [];
+let cart = safeParseCart();
 
-function saveCart() {
-    // SECURITY: Revalidate cart items against the database before saving to ensure prices aren't tampered with
-    const validatedCart = cart.map(item => {
-        const dbProduct = getProductById(item.id);
-        if (dbProduct) {
-            return { ...item, price: dbProduct.price, name: dbProduct.name }; // enforce DB price and name
-        }
-        return item;
-    }).filter(item => getProductById(item.id)); // remove items that don't exist in DB anymore
-
-    localStorage.setItem('kaizen_cart', JSON.stringify(validatedCart));
+function safeParseCart() {
+    try {
+        const parsed = JSON.parse(localStorage.getItem('kaizen_cart')) || [];
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        localStorage.removeItem('kaizen_cart');
+        return [];
+    }
 }
 
-function addToCart(id, name, price, img) {
-    const dbProduct = getProductById(id);
-    if (!dbProduct) return; // SECURITY: Prevent adding non-existent products
+function buildCartKey(id, size) {
+    return `${id}:${size || 'OS'}`;
+}
 
-    const existing = cart.find(item => item.id === id);
+function normalizeCartItem(item) {
+    const dbProduct = getProductById(item.id);
+    if (!dbProduct || !isProductAvailable(dbProduct)) return null;
+
+    const size = item.size || getDefaultAvailableSize(dbProduct) || 'OS';
+    const variant = getProductVariant(dbProduct, size);
+    if (variant && Number(variant.stock) <= 0) return null;
+
+    const maxQty = variant ? Number(variant.stock) : Number(dbProduct.inventory);
+    const qty = Math.min(Math.max(1, parseInt(item.qty, 10) || 1), maxQty);
+
+    return {
+        key: buildCartKey(dbProduct.id, size),
+        id: dbProduct.id,
+        sku: dbProduct.sku,
+        name: dbProduct.name,
+        price: dbProduct.price,
+        img: dbProduct.img,
+        size,
+        qty
+    };
+}
+
+function saveCart() {
+    cart = cart.map(normalizeCartItem).filter(Boolean);
+    localStorage.setItem('kaizen_cart', JSON.stringify(cart));
+}
+
+function addToCart(id, selectedSize) {
+    const dbProduct = getProductById(id);
+    if (!dbProduct || !isProductAvailable(dbProduct)) {
+        showToast('This piece is currently sold out.');
+        return;
+    }
+
+    const size = selectedSize || getDefaultAvailableSize(dbProduct) || 'OS';
+    const variant = getProductVariant(dbProduct, size);
+    const maxQty = variant ? Number(variant.stock) : Number(dbProduct.inventory);
+
+    if (variant && maxQty <= 0) {
+        showToast(`Size ${sanitize(size)} is sold out.`);
+        return;
+    }
+
+    const key = buildCartKey(dbProduct.id, size);
+    const existing = cart.find(item => item.key === key);
+
     if (existing) {
+        if (existing.qty >= maxQty) {
+            showToast('You have reached available stock for this variant.');
+            return;
+        }
         existing.qty += 1;
     } else {
-        // SECURITY: ignore the `price` passed from frontend and use dbProduct.price
-        cart.push({ id, name: dbProduct.name, price: dbProduct.price, img: dbProduct.img, qty: 1 });
+        cart.push({
+            key,
+            id: dbProduct.id,
+            sku: dbProduct.sku,
+            name: dbProduct.name,
+            price: dbProduct.price,
+            img: dbProduct.img,
+            size,
+            qty: 1
+        });
     }
+
     saveCart();
     updateCartUI();
-    showToast(`${sanitize(dbProduct.name)} added to bag!`);
+    showToast(`${dbProduct.name} added to bag.`);
     openCart();
 }
 
-function removeFromCart(id) {
-    cart = cart.filter(item => item.id !== id);
+function removeFromCart(key) {
+    cart = cart.filter(item => item.key !== key);
     saveCart();
     updateCartUI();
 }
 
-function updateQty(id, delta) {
-    const item = cart.find(item => item.id === id);
-    if (item) {
-        item.qty += delta;
-        if (item.qty <= 0) {
-            removeFromCart(id);
-            return;
-        }
+function updateQty(key, delta) {
+    const item = cart.find(item => item.key === key);
+    if (!item) return;
+
+    const product = getProductById(item.id);
+    const variant = getProductVariant(product, item.size);
+    const maxQty = variant ? Number(variant.stock) : Number(product.inventory);
+    const nextQty = item.qty + delta;
+
+    if (nextQty <= 0) {
+        removeFromCart(key);
+        return;
     }
+
+    if (nextQty > maxQty) {
+        showToast('No more stock available for this variant.');
+        return;
+    }
+
+    item.qty = nextQty;
     saveCart();
     updateCartUI();
 }
@@ -99,89 +165,92 @@ function updateCartUI() {
 
     if (!cartItemsContainer || !cartCount) return;
 
+    saveCart();
+
     const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
     const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
-    // Update cart count badge
     cartCount.textContent = totalItems;
-    if (totalItems > 0) {
-        cartCount.classList.add('show');
-    } else {
-        cartCount.classList.remove('show');
-    }
+    cartCount.classList.toggle('show', totalItems > 0);
 
-    // Update cart items
     if (cart.length === 0) {
+        const shopHref = window.location.pathname.includes('index.html') || window.location.pathname === '/' ? '#products' : 'index.html#products';
         cartItemsContainer.innerHTML = `
             <div class="cart-empty">
                 <span class="cart-empty-icon">空</span>
                 <p>Your bag is empty</p>
-                <a href="${window.location.pathname.includes('index.html') || window.location.pathname === '/' ? '#products' : 'index.html#products'}" class="btn-primary btn-sm" onclick="closeCart()">START SHOPPING</a>
+                <a href="${shopHref}" class="btn-primary btn-sm" data-cart-close>START SHOPPING</a>
             </div>
         `;
         if (cartFooter) cartFooter.style.display = 'none';
     } else {
         cartItemsContainer.innerHTML = cart.map(item => `
-            <div class="cart-item">
-                <div class="cart-item-img">
+            <div class="cart-item" data-cart-key="${sanitize(item.key)}">
+                <a class="cart-item-img" href="product.html?id=${sanitize(item.id)}" aria-label="View ${sanitize(item.name)}">
                     <img src="${sanitize(item.img)}" alt="${sanitize(item.name)}">
-                </div>
+                </a>
                 <div class="cart-item-info">
                     <span class="cart-item-name">${sanitize(item.name)}</span>
-                    <span class="cart-item-price">₹${item.price.toLocaleString('en-IN')}</span>
-                    <div class="cart-item-controls">
-                        <button class="qty-btn" onclick="updateQty('${sanitize(item.id)}', -1)">−</button>
+                    <span class="cart-item-variant">Size ${sanitize(item.size)} · ${sanitize(item.sku)}</span>
+                    <span class="cart-item-price">${formatPrice(item.price)}</span>
+                    <div class="cart-item-controls" aria-label="Quantity controls">
+                        <button class="qty-btn" data-cart-action="decrease" data-key="${sanitize(item.key)}" aria-label="Decrease quantity">−</button>
                         <span class="cart-item-qty">${item.qty}</span>
-                        <button class="qty-btn" onclick="updateQty('${sanitize(item.id)}', 1)">+</button>
+                        <button class="qty-btn" data-cart-action="increase" data-key="${sanitize(item.key)}" aria-label="Increase quantity">+</button>
                     </div>
                 </div>
-                <button class="cart-item-remove" onclick="removeFromCart('${sanitize(item.id)}')">×</button>
+                <button class="cart-item-remove" data-cart-action="remove" data-key="${sanitize(item.key)}" aria-label="Remove ${sanitize(item.name)}">×</button>
             </div>
         `).join('');
         if (cartFooter) cartFooter.style.display = 'block';
     }
 
-    // Update total price
     if (cartTotalPrice) {
-        cartTotalPrice.textContent = `₹${totalPrice.toLocaleString('en-IN')}`;
+        cartTotalPrice.textContent = formatPrice(totalPrice);
     }
 
-    // Update WhatsApp checkout link (fallback) and checkout page link
     const checkoutBtn = document.querySelector('.btn-checkout');
     if (checkoutBtn) {
-        // Change checkout link to our mock checkout page instead of WhatsApp directly
-        checkoutBtn.href = "checkout.html";
-        checkoutBtn.textContent = "PROCEED TO CHECKOUT";
-        // Ensure SVG is kept or add it manually if needed, but simple text is fine.
+        checkoutBtn.href = 'checkout.html';
+        checkoutBtn.textContent = 'PROCEED TO CHECKOUT';
     }
 }
 
-// Global scope for inline onclicks
-window.updateQty = updateQty;
-window.removeFromCart = removeFromCart;
+window.updateCartUI = updateCartUI;
 window.closeCart = closeCart;
+window.addToCart = addToCart;
 
-// Init UI on load
 document.addEventListener('DOMContentLoaded', () => {
     updateCartUI();
-    
-    // Setup Cart Listeners
+
     const cartBtn = document.getElementById('cart-btn');
     const cartOverlay = document.getElementById('cart-overlay');
     const cartClose = document.getElementById('cart-close');
-    
-    if(cartBtn) cartBtn.addEventListener('click', openCart);
-    if(cartClose) cartClose.addEventListener('click', closeCart);
-    if(cartOverlay) cartOverlay.addEventListener('click', closeCart);
-    
-    // Add to cart listeners for any buttons already in DOM
+
+    if (cartBtn) cartBtn.addEventListener('click', openCart);
+    if (cartClose) cartClose.addEventListener('click', closeCart);
+    if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
+
     document.body.addEventListener('click', (e) => {
-        if(e.target.closest('.btn-add-cart')) {
-            const btn = e.target.closest('.btn-add-cart');
+        const addButton = e.target.closest('.btn-add-cart');
+        if (addButton) {
             e.stopPropagation();
             e.preventDefault();
-            const { id, name, price, img } = btn.dataset;
-            addToCart(id, name, price, img);
+            addToCart(addButton.dataset.id, addButton.dataset.size);
+            return;
+        }
+
+        const cartAction = e.target.closest('[data-cart-action]');
+        if (cartAction) {
+            const key = cartAction.dataset.key;
+            if (cartAction.dataset.cartAction === 'increase') updateQty(key, 1);
+            if (cartAction.dataset.cartAction === 'decrease') updateQty(key, -1);
+            if (cartAction.dataset.cartAction === 'remove') removeFromCart(key);
+            return;
+        }
+
+        if (e.target.closest('[data-cart-close]')) {
+            closeCart();
         }
     });
 });
