@@ -1,6 +1,7 @@
 // ============================
 // GLOBAL CART SYSTEM
 // ============================
+import { getProductById, isProductAvailable, getDefaultAvailableSize, getProductVariant, formatPrice } from './data.js';
 
 function sanitize(str) {
     if (str === null || str === undefined) return '';
@@ -8,8 +9,6 @@ function sanitize(str) {
     temp.textContent = String(str);
     return temp.innerHTML;
 }
-
-let cart = safeParseCart();
 
 function safeParseCart() {
     try {
@@ -19,6 +18,12 @@ function safeParseCart() {
         localStorage.removeItem('kaizen_cart');
         return [];
     }
+}
+
+const cart = safeParseCart();
+
+function getCart() {
+    return cart;
 }
 
 function buildCartKey(id, size) {
@@ -48,8 +53,13 @@ function normalizeCartItem(item) {
     };
 }
 
+function replaceCart(newItems) {
+    cart.length = 0;
+    cart.push(...newItems);
+}
+
 function saveCart() {
-    cart = cart.map(normalizeCartItem).filter(Boolean);
+    replaceCart(cart.map(normalizeCartItem).filter(Boolean));
     localStorage.setItem('kaizen_cart', JSON.stringify(cart));
 }
 
@@ -98,7 +108,8 @@ function addToCart(id, selectedSize) {
 }
 
 function removeFromCart(key) {
-    cart = cart.filter(item => item.key !== key);
+    const idx = cart.findIndex(item => item.key === key);
+    if (idx !== -1) cart.splice(idx, 1);
     saveCart();
     updateCartUI();
 }
@@ -216,9 +227,7 @@ function updateCartUI() {
     }
 }
 
-window.updateCartUI = updateCartUI;
-window.closeCart = closeCart;
-window.addToCart = addToCart;
+export { sanitize, cart, getCart, addToCart, removeFromCart, updateQty, openCart, closeCart, updateCartUI, showToast };
 
 document.addEventListener('DOMContentLoaded', () => {
     updateCartUI();
@@ -251,6 +260,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (e.target.closest('[data-cart-close]')) {
             closeCart();
+        }
+    });
+
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'kaizen_cart') {
+            replaceCart(safeParseCart());
+            updateCartUI();
         }
     });
 });

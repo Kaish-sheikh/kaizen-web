@@ -1,0 +1,219 @@
+/* ============================
+   RESET & BASE
+   ============================ */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) var(--bg-primary);
+}
+
+html::-webkit-scrollbar { width: 6px; }
+html::-webkit-scrollbar-track { background: var(--bg-primary); }
+html::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+body {
+    font-family: 'Outfit', -apple-system, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; color: inherit; }
+
+.accent { color: var(--accent-warm); }
+
+/* ============================
+   PRELOADER
+   ============================ */
+#preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+#preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: scale(1.05);
+}
+
+.preloader-inner {
+    text-align: center;
+}
+
+.preloader-logo {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 4rem;
+    color: var(--accent-warm);
+    animation: pulse-glow 1.5s ease-in-out infinite;
+    margin-bottom: 0.5rem;
+}
+
+.preloader-text {
+    font-size: 1.2rem;
+    letter-spacing: 0.5em;
+    color: var(--text-secondary);
+    font-weight: 300;
+    margin-bottom: 2rem;
+}
+
+.preloader-bar {
+    width: 200px;
+    height: 2px;
+    background: var(--border);
+    border-radius: 1px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.preloader-bar-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+    border-radius: 1px;
+    animation: loader-fill 2s ease-in-out forwards;
+}
+
+@keyframes loader-fill {
+    0% { width: 0; }
+    50% { width: 70%; }
+    100% { width: 100%; }
+}
+
+@keyframes pulse-glow {
+    0%, 100% { opacity: 1; text-shadow: 0 0 20px var(--accent-glow); }
+    50% { opacity: 0.6; text-shadow: 0 0 40px var(--accent-glow); }
+}
+
+/* ============================
+   CUSTOM CURSOR
+   ============================ */
+.cursor {
+    width: 8px;
+    height: 8px;
+    background: var(--accent-warm);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform var(--transition-fast);
+    mix-blend-mode: difference;
+}
+
+.cursor-follower {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--accent-warm);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+    transform: translate(-50%, -50%);
+    opacity: 0.5;
+}
+
+.cursor-follower.hover {
+    width: 60px;
+    height: 60px;
+    border-color: var(--accent);
+    opacity: 1;
+}
+
+@media (pointer: coarse) {
+    .cursor, .cursor-follower { display: none; }
+}
+
+/* ============================
+   PAGE ENTRY ANIMATION
+   ============================ */
+body {
+    animation: pageEntry 0.5s ease-out;
+}
+
+@keyframes pageEntry {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================
+   PDP IMAGE ZOOM
+   ============================ */
+.pdp-image-container {
+    overflow: hidden;
+}
+
+.pdp-image-container img {
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+}
+
+.pdp-image-container:hover img {
+    transform: scale(1.08);
+}
+
+/* ============================
+   BACK TO TOP BUTTON
+   ============================ */
+.back-to-top {
+    position: fixed;
+    bottom: 100px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--text-primary);
+    border: 1px solid var(--border-hover);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 900;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease;
+    box-shadow: var(--shadow-lg);
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .back-to-top {
+        bottom: 80px;
+        right: 16px;
+    }
+}

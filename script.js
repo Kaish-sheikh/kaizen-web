@@ -1,13 +1,8 @@
 // ============================
 // KAIZEN 改善 - INTERACTIVITY
 // ============================
-
-window.sanitize = window.sanitize || function (str) {
-    if (str === null || str === undefined) return '';
-    const temp = document.createElement('div');
-    temp.textContent = String(str);
-    return temp.innerHTML;
-};
+import { getAllProducts, isProductAvailable, getDefaultAvailableSize, formatPrice } from './data.js';
+import { sanitize } from './cart.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const productState = {
@@ -76,14 +71,54 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================
-    // NAVBAR SCROLL BEHAVIOR
+    // UNIFIED SCROLL HANDLER (RAF throttled)
     // ============================
     const navbar = document.getElementById('navbar');
-    if (navbar) {
-        window.addEventListener('scroll', () => {
-            navbar.classList.toggle('scrolled', window.pageYOffset > 50);
-        });
+    const heroContent = document.querySelector('.hero-content');
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a, .bottom-nav a');
+    const backToTop = document.getElementById('back-to-top');
+    const enableParallax = heroContent && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let scrollTicking = false;
+
+    function onScroll() {
+        const scrollY = window.pageYOffset;
+
+        // Navbar glass effect
+        if (navbar) navbar.classList.toggle('scrolled', scrollY > 50);
+
+        // Back to top visibility
+        if (backToTop) backToTop.classList.toggle('visible', scrollY > 400);
+
+        // Parallax hero
+        if (enableParallax && scrollY < window.innerHeight) {
+            heroContent.style.transform = `translateY(${scrollY * 0.15}px)`;
+            heroContent.style.opacity = 1 - (scrollY / (window.innerHeight * 0.8));
+        }
+
+        // Active nav link
+        if (sections.length > 0 && navLinks.length > 0) {
+            let current = '';
+            sections.forEach(section => {
+                if (scrollY >= section.offsetTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href') || '';
+                link.classList.toggle('active', href === `#${current}` || href.endsWith(`#${current}`));
+            });
+        }
+
+        scrollTicking = false;
     }
+
+    window.addEventListener('scroll', () => {
+        if (!scrollTicking) {
+            requestAnimationFrame(onScroll);
+            scrollTicking = true;
+        }
+    }, { passive: true });
 
     // ============================
     // MOBILE MENU
@@ -279,9 +314,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (searchInput) {
+        let searchTimer;
         searchInput.addEventListener('input', () => {
-            productState.query = searchInput.value.trim();
-            renderProducts();
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => {
+                productState.query = searchInput.value.trim();
+                renderProducts();
+            }, 200);
         });
     }
 
@@ -350,38 +389,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================
-    // PARALLAX ON HERO
+    // BACK TO TOP BUTTON
     // ============================
-    const heroContent = document.querySelector('.hero-content');
-    if (heroContent && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            if (scrolled < window.innerHeight) {
-                heroContent.style.transform = `translateY(${scrolled * 0.15}px)`;
-                heroContent.style.opacity = 1 - (scrolled / (window.innerHeight * 0.8));
-            }
-        });
-    }
-
-    // ============================
-    // NAV LINK ACTIVE STATE
-    // ============================
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-links a, .bottom-nav a');
-
-    if (sections.length > 0 && navLinks.length > 0) {
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                if (window.pageYOffset >= section.offsetTop - 200) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                const href = link.getAttribute('href') || '';
-                link.classList.toggle('active', href === `#${current}` || href.endsWith(`#${current}`));
-            });
+    if (backToTop) {
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 });

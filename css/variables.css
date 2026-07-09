@@ -1,0 +1,79 @@
+/* ============================
+   KAIZEN 改善 — DESIGN SYSTEM
+   ============================ */
+
+:root {
+    /* Core Palette */
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #111111;
+    --bg-tertiary: #1a1a1a;
+    --bg-card: #141414;
+    --bg-elevated: #1e1e1e;
+
+    /* Text */
+    --text-primary: #f5f0eb;
+    --text-secondary: #a8a19a;
+    --text-muted: #6b6560;
+    --text-accent: #f5f0eb;
+
+    /* Accent — warm maroon from brand logo */
+    --accent: #6b1a2a;
+    --accent-light: #8b2a3a;
+    --accent-glow: rgba(107, 26, 42, 0.4);
+    --accent-warm: #d4a574;
+    --accent-gold: #c4a265;
+
+    /* Glass */
+    --glass-bg: rgba(20, 20, 20, 0.7);
+    --glass-border: rgba(245, 240, 235, 0.06);
+    --glass-hover: rgba(245, 240, 235, 0.03);
+
+    /* Borders */
+    --border: rgba(245, 240, 235, 0.08);
+    --border-hover: rgba(245, 240, 235, 0.15);
+
+    /* Misc */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+    --shadow-lg: 0 25px 50px -12px rgba(0,0,0,0.5);
+    --shadow-xl: 0 35px 60px -15px rgba(0,0,0,0.7);
+    --shadow-glow: 0 0 60px -15px var(--accent-glow);
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================
+   LIGHT THEME
+   ============================ */
+.theme-light {
+    --bg-primary: #f8f5f0;
+    --bg-secondary: #efebe5;
+    --bg-tertiary: #e8e2da;
+    --bg-card: #ffffff;
+    --bg-elevated: #f0ece6;
+
+    --text-primary: #1a1614;
+    --text-secondary: #5c534a;
+    --text-muted: #9a918a;
+    --text-accent: #1a1614;
+
+    --accent: #7a2233;
+    --accent-light: #9a3243;
+    --accent-glow: rgba(122, 34, 51, 0.25);
+    --accent-warm: #b07a4a;
+    --accent-gold: #a08245;
+
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(26, 22, 20, 0.08);
+    --glass-hover: rgba(26, 22, 20, 0.04);
+
+    --border: rgba(26, 22, 20, 0.1);
+    --border-hover: rgba(26, 22, 20, 0.2);
+
+    --shadow-lg: 0 25px 50px -12px rgba(0,0,0,0.08);
+    --shadow-xl: 0 35px 60px -15px rgba(0,0,0,0.12);
+    --shadow-glow: 0 0 60px -15px var(--accent-glow);
+}

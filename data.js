@@ -1,4 +1,4 @@
-const products = [
+export const products = [
     {
         id: '1',
         sku: 'KZN-JRS-001',
@@ -12,7 +12,7 @@ const products = [
         tag: 'JERSEY',
         tags: ['jersey', 'mesh', 'colorblock'],
         material: 'Breathable poly mesh',
-        img: 'images/product1.png',
+        img: 'images/product1.webp',
         badge: 'SOLD OUT',
         badgeClass: 'sold-out',
         available: false,
@@ -36,7 +36,7 @@ const products = [
         tag: 'JERSEY',
         tags: ['jersey', 'basketball', 'mesh'],
         material: 'Lightweight sports mesh',
-        img: 'images/product2.png',
+        img: 'images/product2.webp',
         badge: 'NEW',
         badgeClass: 'new',
         available: true,
@@ -60,7 +60,7 @@ const products = [
         tag: 'BOTTOMS',
         tags: ['denim', 'baggy', 'wide-leg'],
         material: 'Heavy cotton denim',
-        img: 'images/product3.png',
+        img: 'images/product3.webp',
         badge: 'HOT',
         badgeClass: 'hot',
         available: true,
@@ -84,7 +84,7 @@ const products = [
         tag: 'GRAPHIC TEE',
         tags: ['graphic', 'oversized', 'cotton'],
         material: 'Heavyweight cotton',
-        img: 'images/product4.png',
+        img: 'images/product4.webp',
         badge: 'NEW',
         badgeClass: 'new',
         available: true,
@@ -108,7 +108,7 @@ const products = [
         tag: 'TRACKS',
         tags: ['tracks', 'baggy', 'piping'],
         material: 'Soft poly-cotton blend',
-        img: 'images/product5.png',
+        img: 'images/product5.webp',
         badge: 'NEW',
         badgeClass: 'new',
         available: true,
@@ -132,7 +132,7 @@ const products = [
         tag: 'OUTERWEAR',
         tags: ['jacket', 'suede', 'premium'],
         material: 'Faux suede with quilted lining',
-        img: 'images/product6.png',
+        img: 'images/product6.webp',
         badge: 'PREMIUM',
         badgeClass: 'premium',
         available: true,
@@ -146,30 +146,30 @@ const products = [
     }
 ];
 
-function getProductById(id) {
+export function getProductById(id) {
     return products.find(p => p.id === String(id));
 }
 
-function getAllProducts() {
+export function getAllProducts() {
     return products;
 }
 
-function getProductVariant(product, size) {
+export function getProductVariant(product, size) {
     if (!product || !Array.isArray(product.sizes)) return null;
     return product.sizes.find(variant => String(variant.size) === String(size));
 }
 
-function isProductAvailable(product) {
+export function isProductAvailable(product) {
     if (!product) return false;
     return product.available && Number(product.inventory) > 0;
 }
 
-function getDefaultAvailableSize(product) {
+export function getDefaultAvailableSize(product) {
     if (!product || !Array.isArray(product.sizes)) return null;
     const variant = product.sizes.find(size => Number(size.stock) > 0);
     return variant ? String(variant.size) : null;
 }
 
-function formatPrice(price) {
+export function formatPrice(price) {
     return '₹' + Number(price || 0).toLocaleString('en-IN');
 }
